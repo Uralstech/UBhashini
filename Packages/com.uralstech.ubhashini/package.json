@@ -1,0 +1,30 @@
+{
+  "name": "com.uralstech.ubhashini",
+  "displayName": "UBhashini",
+  "description": "UBhashini: A C# wrapper for the ULCA Bhashini API.",
+  "keywords": [
+    "API",
+    "Bhashini",
+    "TTS",
+    "STT",
+    "Translate",
+    "Text to Speech",
+    "Speech to Text"
+  ],
+  "version": "1.0.0-preview.1",
+  "unity": "2022.3",
+  "documentationUrl": "https://github.com/Uralstech/com.uralstech.ubhashini#documentation",
+  "changelogUrl": "https://github.com/Uralstech/com.uralstech.ubhashini/releases",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "repository": "https://github.com/Uralstech/com.uralstech.ubhashini.git"
+  },
+  "author": {
+    "name": "Udayshankar Ravikumar",
+    "url": "https://github.com/Uralstech"
+  },
+  "dependencies": {
+    "com.unity.nuget.newtonsoft-json": "3.2.1"
+  }
+}
