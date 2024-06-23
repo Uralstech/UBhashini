@@ -13,12 +13,12 @@
   ],
   "version": "1.0.0-preview.1",
   "unity": "2022.3",
-  "documentationUrl": "https://github.com/Uralstech/com.uralstech.ubhashini#documentation",
-  "changelogUrl": "https://github.com/Uralstech/com.uralstech.ubhashini/releases",
+  "documentationUrl": "https://github.com/Uralstech/UBhashini#documentation",
+  "changelogUrl": "https://github.com/Uralstech/UBhashini/releases",
   "license": "Apache-2.0",
   "repository": {
     "type": "git",
-    "repository": "https://github.com/Uralstech/com.uralstech.ubhashini.git"
+    "repository": "https://github.com/Uralstech/UBhashini.git"
   },
   "author": {
     "name": "Udayshankar Ravikumar",
