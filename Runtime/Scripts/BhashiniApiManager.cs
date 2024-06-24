@@ -195,9 +195,9 @@ namespace Uralstech.UBhashini
                 }
             };
 
-            string requestJson = JsonConvert.SerializeObject(request, s_jsonSerializerSettings);
-            Debug.Log($"Computation request: {requestJson}");
+            Debug.Log("Starting pipeline computation...");
 
+            string requestJson = JsonConvert.SerializeObject(request, s_jsonSerializerSettings);
             using UnityWebRequest webRequest = UnityWebRequest.Post(inferenceData.CallbackUrl, requestJson, "application/json");
 
             webRequest.SetRequestHeader(inferenceData.InferenceApiKey.Name, inferenceData.InferenceApiKey.Value);
@@ -219,7 +219,7 @@ namespace Uralstech.UBhashini
                 return null;
             }
 
-            Debug.Log($"Pipeline computation completed: {webRequest.downloadHandler.text}");
+            Debug.Log("Pipeline computation completed!");
             return response;
         }
     }
