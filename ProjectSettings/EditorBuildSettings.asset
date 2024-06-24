@@ -4,5 +4,8 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Packages/com.uralstech.ubhashini/~Samples/ASR-Translate-TTS/Scenes/ASR-Translate-TTS_Demo.unity
+    guid: c36f7c0f731c3da4889757de9ed078bc
   m_configObjects: {}

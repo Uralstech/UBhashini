@@ -7,6 +7,13 @@ using Uralstech.UBhashini.Data;
 using System;
 using Uralstech.UBhashini.Exceptions;
 
+#if UTILITIES_ENCODING_WAV_1_0_0_OR_GREATER && UTILITIES_AUDIO_1_0_0_OR_GREATER
+using Utilities.Encoding.Wav;
+using Utilities.Audio;
+#elif UTILITIES_AUDIO_1_0_0_OR_GREATER
+using Utilities.Audio;
+#endif
+
 namespace Uralstech.UBhashini
 {
     /// <summary>
@@ -116,25 +123,25 @@ namespace Uralstech.UBhashini
         /// <param name="tasks">The tasks which specify the required audio format.</param>
         /// <returns>The encoding string, or <see langword="null"/> if the task was not found.</returns>
         /// <exception cref="BhashiniAudioIOException">Thrown when an unsupported audio encoding is encountered.</exception>
-        private string GetBase64Audio(AudioClip clip, BhashiniPipelineTask[] tasks)
+        private async Task<string> GetBase64Audio(AudioClip clip, BhashiniPipelineTask[] tasks)
         {
             int taskIndex = Array.FindIndex(tasks, task => task.TaskType == BhashiniPipelineTaskType.SpeechToText);
             if (taskIndex < 0)
                 return null;
 
             BhashiniPipelineTask task = tasks[taskIndex];
-            return Convert.ToBase64String(task.Config.AudioFormat switch
+            return task.Config.AudioFormat switch
             {
 #if UTILITIES_ENCODING_WAV_1_0_0_OR_GREATER && UTILITIES_AUDIO_1_0_0_OR_GREATER
-                BhashiniAudioFormat.Wav => Utilities.Encoding.Wav.AudioClipExtensions.EncodeToWav(clip),
+                BhashiniAudioFormat.Wav => Convert.ToBase64String(await clip.EncodeToWavAsync()),
 #endif
 
 #if UTILITIES_AUDIO_1_0_0_OR_GREATER
-                BhashiniAudioFormat.Pcm => Utilities.Audio.AudioClipExtensions.EncodeToPCM(clip),
+                BhashiniAudioFormat.Pcm => Convert.ToBase64String(clip.EncodeToPCM()),
 #endif
 
                 _ => throw new BhashiniAudioIOException($"Format not supported in operation!", task.Config.AudioFormat)
-            });
+            };
         }
 
         /// <summary>
@@ -181,7 +188,7 @@ namespace Uralstech.UBhashini
                         new BhashiniAudioSource()
                         {
                             AudioContent = audioSource != null
-                                            ? GetBase64Audio(audioSource, tasks)
+                                            ? await GetBase64Audio(audioSource, tasks)
                                             : rawBase64AudioSource,
                         }
                     } : null,
