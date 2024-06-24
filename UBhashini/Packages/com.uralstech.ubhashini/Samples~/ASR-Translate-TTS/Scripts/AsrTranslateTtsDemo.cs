@@ -98,9 +98,7 @@ namespace Uralstech.UBhashini.Demo
                 _ttsData.GetTextToSpeechTask(_voiceType),
             };
 
-            Debug.Log(string.Join("\n", System.Array.ConvertAll(tasks, task => JsonConvert.SerializeObject(task))));
             BhashiniComputeResponse response = await BhashiniApiManager.Instance.ComputeOnPipeline(_inferenceData, tasks, audioSource: _audioClip);
-            Debug.Log("Computation done.");
 
             if (response is null)
             {
@@ -108,13 +106,14 @@ namespace Uralstech.UBhashini.Demo
                 return;
             }
 
-            AudioClip result = await response.GetTextToSpeechResult().ConfigureAwait(false);
+            AudioClip result = await response.GetTextToSpeechResult();
             if (result == null)
             {
                 Debug.LogError("Pipeline computation failed, could not get audio!");
                 return;
             }
-            
+
+            Debug.Log("Computation done.");
             _audioSource.PlayOneShot(result);
         }
     }

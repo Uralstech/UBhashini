@@ -60,6 +60,13 @@
       "dependencies": {},
       "url": "https://packages.unity.com"
     },
+    "com.unity.mobile.android-logcat": {
+      "version": "1.4.2",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {},
+      "url": "https://packages.unity.com"
+    },
     "com.unity.nuget.mono-cecil": {
       "version": "1.11.4",
       "depth": 2,
@@ -169,7 +176,7 @@
       "url": "https://package.openupm.com"
     },
     "com.utilities.audio": {
-      "version": "1.2.0",
+      "version": "1.2.1",
       "depth": 0,
       "source": "registry",
       "dependencies": {
@@ -180,11 +187,11 @@
       "url": "https://package.openupm.com"
     },
     "com.utilities.encoder.wav": {
-      "version": "1.2.0",
+      "version": "1.2.1",
       "depth": 0,
       "source": "registry",
       "dependencies": {
-        "com.utilities.audio": "1.2.0"
+        "com.utilities.audio": "1.2.1"
       },
       "url": "https://package.openupm.com"
     },
