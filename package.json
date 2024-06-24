@@ -14,7 +14,7 @@
     "Speech to Text"
   ],
   
-  "version": "1.0.0-preview.1",
+  "version": "1.0.0",
   "unity": "2022.3",
   
   "hideInEditor": false,
