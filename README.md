@@ -2,6 +2,9 @@
 
 A C# wrapper for the ULCA Bhashini API.
 
+[![openupm](https://img.shields.io/npm/v/com.uralstech.ubhashini?label=openupm&registry_uri=https://package.openupm.com)](https://openupm.com/packages/com.uralstech.ubhashini/)
+[![openupm](https://img.shields.io/badge/dynamic/json?color=brightgreen&label=downloads&query=%24.downloads&suffix=%2Fmonth&url=https%3A%2F%2Fpackage.openupm.com%2Fdownloads%2Fpoint%2Flast-month%2Fcom.uralstech.ubhashini)](https://openupm.com/packages/com.uralstech.ubhashini/)
+
 ### Installation
 
 This *should* work on any reasonably modern Unity version. Built and tested in Unity 2022.3.29f1.
