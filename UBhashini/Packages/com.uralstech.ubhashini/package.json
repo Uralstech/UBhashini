@@ -3,7 +3,7 @@
 
   "displayName": "UBhashini",
   "description": "UBhashini: A C# wrapper for the ULCA Bhashini API.",
-  
+
   "keywords": [
     "API",
     "Bhashini",
@@ -13,26 +13,27 @@
     "Text to Speech",
     "Speech to Text"
   ],
-  
-  "version": "1.0.0",
+
+  "version": "1.0.1",
   "unity": "2022.3",
-  
+
   "hideInEditor": false,
-  
-  "documentationUrl": "https://github.com/Uralstech/UBhashini/wiki",
+
+  "documentationUrl": "https://github.com/Uralstech/UBhashini/blob/master/UBhashini/Packages/com.uralstech.ubhashini/Documentation~/README.md",
+  "changelogUrl": "https://github.com/Uralstech/UBhashini/releases",
   "licensesUrl": "https://github.com/Uralstech/UBhashini/blob/master/LICENSE",
   "license": "Apache-2.0",
-  
+
   "repository": {
     "type": "git",
     "repository": "https://github.com/Uralstech/UBhashini.git"
   },
-  
+
   "author": {
     "name": "Udayshankar Ravikumar",
     "url": "https://github.com/Uralstech"
   },
-  
+
   "samples": [
     {
       "displayName": "ASR-Translate-TTS",
