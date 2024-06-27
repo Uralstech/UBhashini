@@ -65,8 +65,9 @@ BhashiniPipelineData _translateData = response.PipelineResponseConfig[1].Data[0]
 BhashiniPipelineData _ttsData = response.PipelineResponseConfig[2].Data[0];
 ```
 
-Here, as we specified the expected source and target languages for each task in the pipeline, we know the order of pipeline configurations in `PipelineResponseConfig`.
-This may not always be the case. It is recommended to check the array of configurations for the desired model(s).
+Here, as we specified the expected source and target languages for each task in the pipeline, it is very likely that the `Data` array in the `PipelineResponseConfig` elements will only contain one `BhashiniPipelineData` object.
+This may not always be the case, so, it is recommended to check the array of configurations for the desired model(s).
+The order of `PipelineResponseConfig` is based on the order of the tasks array in the input for `ConfigurePipeline`.
 
 ### Computation
 
