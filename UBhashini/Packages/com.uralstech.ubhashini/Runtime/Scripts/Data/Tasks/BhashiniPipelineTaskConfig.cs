@@ -1,50 +1,9 @@
 ﻿using Newtonsoft.Json.Serialization;
 using Newtonsoft.Json;
 using System.ComponentModel;
-using Newtonsoft.Json.Converters;
-using System.Runtime.Serialization;
 
 namespace Uralstech.UBhashini.Data
 {
-    [JsonObject(NamingStrategyType = typeof(CamelCaseNamingStrategy))]
-    public class BhashiniPipelineConfig
-    {
-        public string PipelineId;
-    }
-
-    [JsonObject(NamingStrategyType = typeof(CamelCaseNamingStrategy))]
-    public class BhashiniPipelineTask
-    {
-        public BhashiniPipelineTaskType TaskType;
-
-        [DefaultValue(null)]
-        public BhashiniPipelineTaskConfig Config = null;
-
-        public static BhashiniPipelineTask GetConfigurationTask(BhashiniPipelineTaskType type)
-        {
-            return new()
-            {
-                TaskType = type,
-            };
-        }
-
-        public static BhashiniPipelineTask GetConfigurationTask(BhashiniPipelineTaskType type, string sourceLanguage, string targetLanguage = null)
-        {
-            return new()
-            {
-                TaskType = type,
-                Config = new()
-                {
-                    Language = new()
-                    {
-                        SourceLanguage = sourceLanguage,
-                        TargetLanguage = targetLanguage ?? string.Empty,
-                    },
-                },
-            };
-        }
-    }
-
     [JsonObject(NamingStrategyType = typeof(CamelCaseNamingStrategy))]
     public class BhashiniPipelineTaskConfig
     {
@@ -95,20 +54,5 @@ namespace Uralstech.UBhashini.Data
         /// </summary>
         [DefaultValue(-1)]
         public BhashiniVoiceType Gender = BhashiniVoiceType.UNSPECIFIED_UNKNOWN_DONTUSE_DEFAULT;
-    }
-
-    [JsonConverter(typeof(StringEnumConverter))]
-    public enum BhashiniPipelineTaskType
-    {
-        UNSPECIFIED_UNKNOWN_DONTUSE_DEFAULT,
-
-        [EnumMember(Value = "asr")]
-        SpeechToText,
-
-        [EnumMember(Value = "translation")]
-        TextTranslation,
-
-        [EnumMember(Value = "tts")]
-        TextToSpeech,
     }
 }
