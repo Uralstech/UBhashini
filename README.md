@@ -7,7 +7,7 @@ A C# wrapper for the ULCA Bhashini API.
 
 ### Installation
 
-This *should* work on any reasonably modern Unity version. Built and tested in Unity 2022.3.29f1.
+This *should* work on any reasonably modern Unity version. Built and tested in Unity 6000.0.26f1 (Unity 6).
 
 #### From OpenUPM Through Unity Package Manager
 
@@ -18,10 +18,10 @@ This *should* work on any reasonably modern Unity version. Built and tested in U
     - URL: `https://package.openupm.com`
     - Scope(s)
         - `com.uralstech`
-        - *`com.utilities`
+        - \*`com.utilities`
 4. Open the Unity Package Manager window (`Window` -> `Package Manager`)
 5. Change the registry from `Unity` to `My Registries`
-6. Add the `UBhashini`, *`Utilities.Encoder.Wav` and *`Utilities.Audio` packages
+6. Add the `UBhashini`, \*`Utilities.Encoder.Wav` and \*`Utilities.Audio` packages
 
 #### From GitHub Through Unity Package Manager
 
@@ -31,9 +31,9 @@ This *should* work on any reasonably modern Unity version. Built and tested in U
     - `https://github.com/Uralstech/UBhashini.git#upm`
 
 *\*Adding additional dependencies:*<br/>
-Follow the steps detailed in the OpenUPM installation method and only install the *`Utilities.Encoder.Wav` and *`Utilities.Audio` packages.
+Follow the steps detailed in the OpenUPM installation method and only install the \*`Utilities.Encoder.Wav` and \*`Utilities.Audio` packages.
 
-*Optional, but required if you don't want to bother with encoding your AudioClips into Base64 strings manually, or, if you want to use the samples.
+\*Optional, but required if you don't want to bother with encoding your AudioClips into Base64 strings manually, or if you want to use the samples.
 
 ### Documentation
 

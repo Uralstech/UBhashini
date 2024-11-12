@@ -1,9 +1,7 @@
 {
   "name": "com.uralstech.ubhashini",
-
   "displayName": "UBhashini",
   "description": "UBhashini: A C# wrapper for the ULCA Bhashini API.",
-
   "keywords": [
     "API",
     "Bhashini",
@@ -13,27 +11,21 @@
     "Text to Speech",
     "Speech to Text"
   ],
-
   "version": "1.0.2",
   "unity": "2022.3",
-
   "hideInEditor": false,
-
   "documentationUrl": "https://github.com/Uralstech/UBhashini/blob/master/UBhashini/Packages/com.uralstech.ubhashini/Documentation~/README.md",
   "changelogUrl": "https://github.com/Uralstech/UBhashini/releases",
   "licensesUrl": "https://github.com/Uralstech/UBhashini/blob/master/LICENSE",
   "license": "Apache-2.0",
-
   "repository": {
     "type": "git",
     "repository": "https://github.com/Uralstech/UBhashini.git"
   },
-
   "author": {
     "name": "Udayshankar Ravikumar",
     "url": "https://github.com/Uralstech"
   },
-
   "samples": [
     {
       "displayName": "ASR-Translate-TTS",
@@ -41,8 +33,11 @@
       "path": "Samples~/ASR-Translate-TTS"
     }
   ],
-
   "dependencies": {
-    "com.unity.nuget.newtonsoft-json": "3.2.1"
+    "com.unity.nuget.newtonsoft-json": "3.2.1",
+    "com.uralstech.utils.singleton": "1.1.1",
+    "com.unity.modules.unitywebrequestaudio": "1.0.0",
+    "com.unity.modules.unitywebrequest": "1.0.0",
+    "com.unity.modules.audio": "1.0.0"
   }
 }
