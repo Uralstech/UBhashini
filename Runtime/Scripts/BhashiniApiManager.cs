@@ -2,15 +2,16 @@ using Newtonsoft.Json;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Networking;
-using Uralstech.UBhashini.Utils.Singleton;
+using Uralstech.Utils.Singleton;
 using Uralstech.UBhashini.Data;
 using System;
 using Uralstech.UBhashini.Exceptions;
 
-#if UTILITIES_ENCODING_WAV_1_0_0_OR_GREATER && UTILITIES_AUDIO_1_0_0_OR_GREATER
+#if UTILITIES_ENCODING_WAV_1_0_0_OR_GREATER
 using Utilities.Encoding.Wav;
-using Utilities.Audio;
-#elif UTILITIES_AUDIO_1_0_0_OR_GREATER
+#endif
+
+#if UTILITIES_AUDIO_1_0_0_OR_GREATER
 using Utilities.Audio;
 #endif
 
@@ -111,6 +112,7 @@ namespace Uralstech.UBhashini
             return response;
         }
 
+#pragma warning disable CS1998
         /// <summary>
         /// Encodes the given <see cref="AudioClip"/> to *WAV or **PCM base64.
         /// </summary>
@@ -132,7 +134,7 @@ namespace Uralstech.UBhashini
             BhashiniPipelineTask task = tasks[taskIndex];
             return task.Config.AudioFormat switch
             {
-#if UTILITIES_ENCODING_WAV_1_0_0_OR_GREATER && UTILITIES_AUDIO_1_0_0_OR_GREATER
+#if UTILITIES_ENCODING_WAV_1_0_0_OR_GREATER
                 BhashiniAudioFormat.Wav => Convert.ToBase64String(await clip.EncodeToWavAsync()),
 #endif
 
@@ -143,6 +145,7 @@ namespace Uralstech.UBhashini
                 _ => throw new BhashiniAudioIOException($"Format not supported in operation!", task.Config.AudioFormat)
             };
         }
+#pragma warning restore CS1998
 
         /// <summary>
         /// Runs the given computation tasks on a pipeline.
