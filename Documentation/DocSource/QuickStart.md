@@ -1,10 +1,10 @@
-## UBhashini Documentation
+# Quick Start
 
-### Setup
+## Setup
 
 Add an instance of `BhashiniApiManager` to your scene, and set it up with your ULCA user ID and API key, as detailed in the [*Bhashini documentation*](https://bhashini.gitbook.io/bhashini-apis/pre-requisites-and-onboarding).
 
-### Pipelines
+## Pipelines
 
 As from the [*Bhashini documentation*](https://bhashini.gitbook.io/bhashini-apis):
 > ULCA Pipeline is a set of tasks that any specific pipeline supports. For example, any specific pipeline (identified by unique pipeline ID) can support the following:
@@ -32,7 +32,7 @@ You can have any combination of these tasks, or just individual ones. You can ev
 
 - STT -> Translate -> TTS!
 
-#### Code
+### Code
 
 So, before we do any computation, we have to set up our pipelines:
 
@@ -69,11 +69,11 @@ Here, as we specified the expected source and target languages for each task in 
 This may not always be the case, so, it is recommended to check the array of configurations for the desired model(s).
 The order of `PipelineResponseConfig` is based on the order of the tasks array in the input for `ConfigurePipeline`.
 
-### Computation
+## Computation
 
 Now that we have the inference data and pipelines configured, we can go straight into computation.
 
-#### Code
+### Code
 
 ```csharp
 _audioClip = ...

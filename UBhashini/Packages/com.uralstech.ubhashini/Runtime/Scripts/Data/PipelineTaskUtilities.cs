@@ -7,8 +7,19 @@ using Uralstech.UBhashini.Exceptions;
 
 namespace Uralstech.UBhashini.Data
 {
+    /// <summary>
+    /// QOL extensions for pipeline computation tasks and results.
+    /// </summary>
     public static class PipelineComputationExtensions
     {
+        /// <summary>
+        /// Converts the current <see cref="BhashiniPipelineData"/> to an STT <see cref="BhashiniPipelineTask"/>.
+        /// </summary>
+        /// <param name="pipelineData">The current <see cref="BhashiniPipelineData"/>.</param>
+        /// <param name="sourceLanguage">The language of the speech. If <see langword="null"/>, takes it from the <see cref="BhashiniPipelineData"/>.</param>
+        /// <param name="audioFormat">The format the audio should be sent in, defaults to <see cref="BhashiniAudioFormat.Wav"/>.</param>
+        /// <param name="sampleRate">The sample rate of the audio, defaults to 44100.</param>
+        /// <returns>A configured <see cref="BhashiniPipelineTask"/> object.</returns>
         public static BhashiniPipelineTask GetSpeechToTextTask(this BhashiniPipelineData pipelineData, string sourceLanguage = null, BhashiniAudioFormat audioFormat = BhashiniAudioFormat.Wav, int sampleRate = 44100)
         {
             sourceLanguage ??= pipelineData.Language.SourceLanguage;
@@ -30,6 +41,13 @@ namespace Uralstech.UBhashini.Data
             };
         }
 
+        /// <summary>
+        /// Converts the current <see cref="BhashiniPipelineData"/> to a TTS <see cref="BhashiniPipelineTask"/>.
+        /// </summary>
+        /// <param name="pipelineData">The current <see cref="BhashiniPipelineData"/>.</param>
+        /// <param name="voiceType">The voice type.</param>
+        /// <param name="sourceLanguage">The language of the text. If <see langword="null"/>, takes it from the <see cref="BhashiniPipelineData"/>.</param>
+        /// <returns>A configured <see cref="BhashiniPipelineTask"/> object.</returns>
         public static BhashiniPipelineTask GetTextToSpeechTask(this BhashiniPipelineData pipelineData, BhashiniVoiceType voiceType, string sourceLanguage = null)
         {
             sourceLanguage ??= pipelineData.Language.SourceLanguage;
@@ -50,6 +68,13 @@ namespace Uralstech.UBhashini.Data
             };
         }
 
+        /// <summary>
+        /// Converts the current <see cref="BhashiniPipelineData"/> to a translation <see cref="BhashiniPipelineTask"/>.
+        /// </summary>
+        /// <param name="pipelineData">The current <see cref="BhashiniPipelineData"/>.</param>
+        /// <param name="sourceLanguage">The language of the input text. If <see langword="null"/>, takes it from the <see cref="BhashiniPipelineData"/>.</param>
+        /// <param name="targetLanguage">The language of the output text. If <see langword="null"/>, takes it from the <see cref="BhashiniPipelineData"/>.</param>
+        /// <returns>A configured <see cref="BhashiniPipelineTask"/> object.</returns>
         public static BhashiniPipelineTask GetTextTranslateTask(this BhashiniPipelineData pipelineData, string sourceLanguage = null, string targetLanguage = null)
         {
             sourceLanguage ??= pipelineData.Language.SourceLanguage;
@@ -70,7 +95,12 @@ namespace Uralstech.UBhashini.Data
                 },
             };
         }
-    
+
+        /// <summary>
+        /// Gets the response text from an STT <see cref="BhashiniComputeResponse"/>.
+        /// </summary>
+        /// <param name="pipelineResponse">The current <see cref="BhashiniComputeResponse"/>.</param>
+        /// <returns>The transcribed text.</returns>
         public static string GetSpeechToTextResult(this BhashiniComputeResponse pipelineResponse)
         {
             BhashiniTextSource[] sources = pipelineResponse.PipelineResponse[^1].Text;
@@ -78,6 +108,11 @@ namespace Uralstech.UBhashini.Data
             return sources.Length == 0 ? null : sources[0].Source;
         }
 
+        /// <summary>
+        /// Gets the response text from a translate <see cref="BhashiniComputeResponse"/>.
+        /// </summary>
+        /// <param name="pipelineResponse">The current <see cref="BhashiniComputeResponse"/>.</param>
+        /// <returns>The translated text.</returns>
         public static string GetTextTranslateResult(this BhashiniComputeResponse pipelineResponse)
         {
             BhashiniTextSource[] sources = pipelineResponse.PipelineResponse[^1].Text;
@@ -85,11 +120,16 @@ namespace Uralstech.UBhashini.Data
             return sources.Length == 0 ? null : sources[0].Target;
         }
 
+        /// <summary>
+        /// Gets the response audio from a TTS <see cref="BhashiniComputeResponse"/>.
+        /// </summary>
         /// <remarks>
-        /// This method only supports <see cref="BhashiniAudioFormat.Wav"/>, <see cref="BhashiniAudioFormat.Mp3"/> and *<see cref="BhashiniAudioFormat.Pcm"/>.
+        /// This method only supports <see cref="BhashiniAudioFormat.Wav"/>, <see cref="BhashiniAudioFormat.Mp3"/> and <see cref="BhashiniAudioFormat.Pcm"/>*.
         /// <br/><br/>
         /// *<see href="https://openupm.com/packages/com.utilities.audio/">Utilities.Audio</see> is required.
         /// </remarks>
+        /// <param name="pipelineResponse">The current <see cref="BhashiniComputeResponse"/>.</param>
+        /// <returns>The synthesized audio.</returns>
         public static async Task<AudioClip> GetTextToSpeechResult(this BhashiniComputeResponse pipelineResponse)
         {
             BhashiniComputeResponseData data = pipelineResponse.PipelineResponse[^1];

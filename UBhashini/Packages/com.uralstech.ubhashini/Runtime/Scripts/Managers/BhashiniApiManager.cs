@@ -24,14 +24,6 @@ namespace Uralstech.UBhashini
     public class BhashiniApiManager : Singleton<BhashiniApiManager>
     {
         /// <summary>
-        /// JSON serializer for data. (DefaultValueHandling = true)
-        /// </summary>
-        private static readonly JsonSerializerSettings s_jsonSerializerSettings = new()
-        {
-            DefaultValueHandling = DefaultValueHandling.Ignore,
-        };
-
-        /// <summary>
         /// The pipeline configuration API endpoint.
         /// </summary>
         [Tooltip("The pipeline configuration API endpoint.")]
@@ -85,7 +77,7 @@ namespace Uralstech.UBhashini
 
             Debug.Log("Starting pipeline configuration...");
 
-            string requestJson = JsonConvert.SerializeObject(request, s_jsonSerializerSettings);
+            string requestJson = JsonConvert.SerializeObject(request);
             using UnityWebRequest webRequest = UnityWebRequest.Post(PipelineConfigurationEndpoint, requestJson, "application/json");
 
             webRequest.SetRequestHeader("userId", _ulcaUserId);
@@ -200,7 +192,7 @@ namespace Uralstech.UBhashini
 
             Debug.Log("Starting pipeline computation...");
 
-            string requestJson = JsonConvert.SerializeObject(request, s_jsonSerializerSettings);
+            string requestJson = JsonConvert.SerializeObject(request);
             using UnityWebRequest webRequest = UnityWebRequest.Post(inferenceData.CallbackUrl, requestJson, "application/json");
 
             webRequest.SetRequestHeader(inferenceData.InferenceApiKey.Name, inferenceData.InferenceApiKey.Value);
