@@ -23,7 +23,7 @@ A clear and concise description of what you expected to happen.
 **Development environment:**
  - Unity version: [e.g. 2022.3, 2020.2]
  - Build target: [e.g. iOS, Android, Editor]
- - UBhashini version [e.g. 1.1.0]
+ - UBhashini version [e.g. 2.0.0]
 
 **Additional context**
 Add any other context about the problem here.
