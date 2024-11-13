@@ -63,7 +63,7 @@ namespace Uralstech.UBhashini.Data
         /// <returns>A configured <see cref="BhashiniComputeTask"/> object.</returns>
         public static BhashiniComputeTask ToTranslateTask(this BhashiniPipelineTaskConfiguration pipelineData, string sourceLanguage = null, string targetLanguage = null)
         {
-            BhashiniComputeTask task = new(BhashiniTask.TextToSpeech, pipelineData);
+            BhashiniComputeTask task = new(BhashiniTask.Translation, pipelineData);
 
             if (!string.IsNullOrEmpty(sourceLanguage))
                 task.Configuration.Language.Source = sourceLanguage;
