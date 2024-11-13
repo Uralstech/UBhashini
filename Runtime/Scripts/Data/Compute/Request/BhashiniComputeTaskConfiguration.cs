@@ -7,7 +7,7 @@ namespace Uralstech.UBhashini.Data.Compute
     /// <summary>
     /// Configuration for a computation task.
     /// </summary>
-    public class BhashiniComputeConfiguration
+    public class BhashiniComputeTaskConfiguration
     {
         /// <summary>
         /// The service to use for computation.
@@ -19,7 +19,7 @@ namespace Uralstech.UBhashini.Data.Compute
         public string ServiceId;
 
         /// <summary>
-        /// The language of the computation.
+        /// The language of the computation input and output.
         /// </summary>
         /// <remarks>
         /// <seealso href="https://bhashini.gitbook.io/bhashini-apis/pipeline-compute-call/request-payload"/>

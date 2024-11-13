@@ -15,6 +15,6 @@ namespace Uralstech.UBhashini.Data.Compute
         /// <seealso href="https://bhashini.gitbook.io/bhashini-apis/pipeline-compute-call/response-payload"/>
         /// </remarks>
         [JsonProperty("pipelineResponse")]
-        public BhashiniComputeResponseData[] TaskResults;
+        public BhashiniComputeResponseTask[] TaskResults;
     }
 }

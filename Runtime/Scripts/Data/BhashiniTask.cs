@@ -8,7 +8,7 @@ namespace Uralstech.UBhashini.Data
     /// The type of task a pipeline should compute.
     /// </summary>
     [JsonConverter(typeof(StringEnumConverter))]
-    public enum BhashiniPipelineTaskType
+    public enum BhashiniTask
     {
         /// <summary>
         /// Default value. Do not use.

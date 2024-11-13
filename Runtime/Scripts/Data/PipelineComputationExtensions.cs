@@ -24,7 +24,7 @@ namespace Uralstech.UBhashini.Data
         /// <returns>A configured <see cref="BhashiniComputeTask"/> object.</returns>
         public static BhashiniComputeTask ToSpeechToTextTask(this BhashiniPipelineTaskConfiguration pipelineData, string sourceLanguage = null, BhashiniAudioFormat audioFormat = BhashiniAudioFormat.Wav, int sampleRate = 44100)
         {
-            BhashiniComputeTask task = new(BhashiniPipelineTaskType.SpeechToText, pipelineData);
+            BhashiniComputeTask task = new(BhashiniTask.SpeechToText, pipelineData);
             task.Configuration.AudioFormat = audioFormat;
             task.Configuration.SampleRate = sampleRate;
 
@@ -43,7 +43,7 @@ namespace Uralstech.UBhashini.Data
         /// <returns>A configured <see cref="BhashiniComputeTask"/> object.</returns>
         public static BhashiniComputeTask ToTextToSpeechTask(this BhashiniPipelineTaskConfiguration pipelineData, BhashiniVoiceType voiceType = BhashiniVoiceType.Default, string sourceLanguage = null)
         {
-            BhashiniComputeTask task = new(BhashiniPipelineTaskType.TextToSpeech, pipelineData);
+            BhashiniComputeTask task = new(BhashiniTask.TextToSpeech, pipelineData);
 
             if (!string.IsNullOrEmpty(sourceLanguage))
                 task.Configuration.Language.Source = sourceLanguage;
@@ -63,7 +63,7 @@ namespace Uralstech.UBhashini.Data
         /// <returns>A configured <see cref="BhashiniComputeTask"/> object.</returns>
         public static BhashiniComputeTask ToTranslateTask(this BhashiniPipelineTaskConfiguration pipelineData, string sourceLanguage = null, string targetLanguage = null)
         {
-            BhashiniComputeTask task = new(BhashiniPipelineTaskType.TextToSpeech, pipelineData);
+            BhashiniComputeTask task = new(BhashiniTask.TextToSpeech, pipelineData);
 
             if (!string.IsNullOrEmpty(sourceLanguage))
                 task.Configuration.Language.Source = sourceLanguage;
@@ -81,9 +81,9 @@ namespace Uralstech.UBhashini.Data
         /// <returns>The transcribed text.</returns>
         public static string GetSpeechToTextResult(this BhashiniComputeResponse pipelineResponse)
         {
-            foreach (BhashiniComputeResponseData result in pipelineResponse.TaskResults)
+            foreach (BhashiniComputeResponseTask result in pipelineResponse.TaskResults)
             {
-                if (result.TaskType == BhashiniPipelineTaskType.SpeechToText)
+                if (result.Task == BhashiniTask.SpeechToText)
                     return result.TextOutputs[0].Source;
             }
 
@@ -97,9 +97,9 @@ namespace Uralstech.UBhashini.Data
         /// <returns>The translated text.</returns>
         public static string GetTranslateResult(this BhashiniComputeResponse pipelineResponse)
         {
-            foreach (BhashiniComputeResponseData result in pipelineResponse.TaskResults)
+            foreach (BhashiniComputeResponseTask result in pipelineResponse.TaskResults)
             {
-                if (result.TaskType == BhashiniPipelineTaskType.Translation)
+                if (result.Task == BhashiniTask.Translation)
                     return result.TextOutputs[0].Target;
             }
 
@@ -120,9 +120,9 @@ namespace Uralstech.UBhashini.Data
         {
             byte[] audioData = null;
             BhashiniAudioFormat audioFormat = BhashiniAudioFormat.Default;
-            foreach (BhashiniComputeResponseData result in pipelineResponse.TaskResults)
+            foreach (BhashiniComputeResponseTask result in pipelineResponse.TaskResults)
             {
-                if (result.TaskType == BhashiniPipelineTaskType.TextToSpeech)
+                if (result.Task == BhashiniTask.TextToSpeech)
                 {
                     audioData = Convert.FromBase64String(result.AudioOutputs[0].Base64Audio);
                     audioFormat = result.TaskConfiguration.AudioFormat;

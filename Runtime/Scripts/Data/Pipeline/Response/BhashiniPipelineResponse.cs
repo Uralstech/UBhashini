@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using System.Linq;
 
 namespace Uralstech.UBhashini.Data.Pipeline
 {
@@ -80,5 +81,23 @@ namespace Uralstech.UBhashini.Data.Pipeline
         /// </remarks>
         [JsonProperty("pipelineInferenceAPIEndPoint")]
         public BhashiniPipelineInferenceEndpoint InferenceEndpoint;
+
+        /// <summary>
+        /// Gets the first <see cref="BhashiniTask.SpeechToText"/> type <see cref="BhashiniPipelineConfiguration"/> in <see cref="PipelineConfigurations"/>.
+        /// </summary>
+        public BhashiniPipelineConfiguration SpeechToTextConfiguration => _speechToTextConfiguration ??= PipelineConfigurations.Where(config => config.Type == BhashiniTask.SpeechToText).FirstOrDefault();
+        private BhashiniPipelineConfiguration _speechToTextConfiguration;
+
+        /// <summary>
+        /// Gets the first <see cref="BhashiniTask.Translation"/> type <see cref="BhashiniPipelineConfiguration"/> in <see cref="PipelineConfigurations"/>.
+        /// </summary>
+        public BhashiniPipelineConfiguration TranslateConfiguration => _translateConfiguration ??= PipelineConfigurations.Where(config => config.Type == BhashiniTask.Translation).FirstOrDefault();
+        private BhashiniPipelineConfiguration _translateConfiguration;
+
+        /// <summary>
+        /// Gets the first <see cref="BhashiniTask.TextToSpeech"/> type <see cref="BhashiniPipelineConfiguration"/> in <see cref="PipelineConfigurations"/>.
+        /// </summary>
+        public BhashiniPipelineConfiguration TextToSpeechConfiguration => _textToSpeechConfiguration ??= PipelineConfigurations.Where(config => config.Type == BhashiniTask.TextToSpeech).FirstOrDefault();
+        private BhashiniPipelineConfiguration _textToSpeechConfiguration;
     }
 }

@@ -6,7 +6,7 @@ namespace Uralstech.UBhashini.Data.Compute
     /// <summary>
     /// Response data for a computed task result.
     /// </summary>
-    public class BhashiniComputeResponseData
+    public class BhashiniComputeResponseTask
     {
         /// <summary>
         /// The task type.
@@ -15,7 +15,7 @@ namespace Uralstech.UBhashini.Data.Compute
         /// <seealso href="https://bhashini.gitbook.io/bhashini-apis/pipeline-compute-call/response-payload"/>
         /// </remarks>
         [JsonProperty("taskType")]
-        public BhashiniPipelineTaskType TaskType;
+        public BhashiniTask Task;
 
         /// <summary>
         /// The configuration of the task's result. Can be <see langword="null"/> for translation tasks.
@@ -24,7 +24,7 @@ namespace Uralstech.UBhashini.Data.Compute
         /// <seealso href="https://bhashini.gitbook.io/bhashini-apis/pipeline-compute-call/response-payload"/>
         /// </remarks>
         [JsonProperty("config")]
-        public BhashiniComputeResponseConfiguration TaskConfiguration;
+        public BhashiniComputeResponseTaskConfiguration TaskConfiguration;
 
         /// <summary>
         /// Text outputs for STT and translation tasks.
