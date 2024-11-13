@@ -3,6 +3,8 @@ using System.IO;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Networking;
+using Uralstech.UBhashini.Data.Compute;
+using Uralstech.UBhashini.Data.Pipeline;
 using Uralstech.UBhashini.Exceptions;
 
 namespace Uralstech.UBhashini.Data
@@ -13,115 +15,99 @@ namespace Uralstech.UBhashini.Data
     public static class PipelineComputationExtensions
     {
         /// <summary>
-        /// Converts the current <see cref="BhashiniPipelineData"/> to an STT <see cref="BhashiniPipelineTask"/>.
+        /// Converts the current <see cref="BhashiniPipelineTaskConfiguration"/> to an STT <see cref="BhashiniComputeTask"/>.
         /// </summary>
-        /// <param name="pipelineData">The current <see cref="BhashiniPipelineData"/>.</param>
-        /// <param name="sourceLanguage">The language of the speech. If <see langword="null"/>, takes it from the <see cref="BhashiniPipelineData"/>.</param>
+        /// <param name="pipelineData">The current <see cref="BhashiniPipelineTaskConfiguration"/>.</param>
+        /// <param name="sourceLanguage">The language of the speech. If <see langword="null"/>, takes it from the <see cref="BhashiniPipelineTaskConfiguration"/>.</param>
         /// <param name="audioFormat">The format the audio should be sent in, defaults to <see cref="BhashiniAudioFormat.Wav"/>.</param>
         /// <param name="sampleRate">The sample rate of the audio, defaults to 44100.</param>
-        /// <returns>A configured <see cref="BhashiniPipelineTask"/> object.</returns>
-        public static BhashiniPipelineTask GetSpeechToTextTask(this BhashiniPipelineData pipelineData, string sourceLanguage = null, BhashiniAudioFormat audioFormat = BhashiniAudioFormat.Wav, int sampleRate = 44100)
+        /// <returns>A configured <see cref="BhashiniComputeTask"/> object.</returns>
+        public static BhashiniComputeTask ToSpeechToTextTask(this BhashiniPipelineTaskConfiguration pipelineData, string sourceLanguage = null, BhashiniAudioFormat audioFormat = BhashiniAudioFormat.Wav, int sampleRate = 44100)
         {
-            sourceLanguage ??= pipelineData.Language.SourceLanguage;
+            BhashiniComputeTask task = new(BhashiniPipelineTaskType.SpeechToText, pipelineData);
+            task.Configuration.AudioFormat = audioFormat;
+            task.Configuration.SampleRate = sampleRate;
 
-            return new()
-            {
-                TaskType = BhashiniPipelineTaskType.SpeechToText,
-                Config = new()
-                {
-                    Language = new()
-                    {
-                        SourceLanguage = sourceLanguage,
-                    },
+            if (!string.IsNullOrEmpty(sourceLanguage))
+                task.Configuration.Language.Source = sourceLanguage;
 
-                    ServiceId = pipelineData.ServiceId,
-                    AudioFormat = audioFormat,
-                    SamplingRate = sampleRate,
-                },
-            };
+            return task;
         }
 
         /// <summary>
-        /// Converts the current <see cref="BhashiniPipelineData"/> to a TTS <see cref="BhashiniPipelineTask"/>.
+        /// Converts the current <see cref="BhashiniPipelineTaskConfiguration"/> to a TTS <see cref="BhashiniComputeTask"/>.
         /// </summary>
-        /// <param name="pipelineData">The current <see cref="BhashiniPipelineData"/>.</param>
-        /// <param name="voiceType">The voice type.</param>
-        /// <param name="sourceLanguage">The language of the text. If <see langword="null"/>, takes it from the <see cref="BhashiniPipelineData"/>.</param>
-        /// <returns>A configured <see cref="BhashiniPipelineTask"/> object.</returns>
-        public static BhashiniPipelineTask GetTextToSpeechTask(this BhashiniPipelineData pipelineData, BhashiniVoiceType voiceType, string sourceLanguage = null)
+        /// <param name="pipelineData">The current <see cref="BhashiniPipelineTaskConfiguration"/>.</param>
+        /// <param name="voiceType">The voice type. If not given, takes the first available one from the <see cref="BhashiniPipelineTaskConfiguration"/>.</param>
+        /// <param name="sourceLanguage">The language of the text. If <see langword="null"/>, takes it from the <see cref="BhashiniPipelineTaskConfiguration"/>.</param>
+        /// <returns>A configured <see cref="BhashiniComputeTask"/> object.</returns>
+        public static BhashiniComputeTask ToTextToSpeechTask(this BhashiniPipelineTaskConfiguration pipelineData, BhashiniVoiceType voiceType = BhashiniVoiceType.Default, string sourceLanguage = null)
         {
-            sourceLanguage ??= pipelineData.Language.SourceLanguage;
+            BhashiniComputeTask task = new(BhashiniPipelineTaskType.TextToSpeech, pipelineData);
 
-            return new()
-            {
-                TaskType = BhashiniPipelineTaskType.TextToSpeech,
-                Config = new()
-                {
-                    Language = new()
-                    {
-                        SourceLanguage = sourceLanguage,
-                    },
+            if (!string.IsNullOrEmpty(sourceLanguage))
+                task.Configuration.Language.Source = sourceLanguage;
 
-                    ServiceId = pipelineData.ServiceId,
-                    Gender = voiceType,
-                },
-            };
+            if (voiceType != BhashiniVoiceType.Default)
+                task.Configuration.VoiceType = voiceType;
+
+            return task;
         }
 
         /// <summary>
-        /// Converts the current <see cref="BhashiniPipelineData"/> to a translation <see cref="BhashiniPipelineTask"/>.
+        /// Converts the current <see cref="BhashiniPipelineTaskConfiguration"/> to a translation <see cref="BhashiniComputeTask"/>.
         /// </summary>
-        /// <param name="pipelineData">The current <see cref="BhashiniPipelineData"/>.</param>
-        /// <param name="sourceLanguage">The language of the input text. If <see langword="null"/>, takes it from the <see cref="BhashiniPipelineData"/>.</param>
-        /// <param name="targetLanguage">The language of the output text. If <see langword="null"/>, takes it from the <see cref="BhashiniPipelineData"/>.</param>
-        /// <returns>A configured <see cref="BhashiniPipelineTask"/> object.</returns>
-        public static BhashiniPipelineTask GetTextTranslateTask(this BhashiniPipelineData pipelineData, string sourceLanguage = null, string targetLanguage = null)
+        /// <param name="pipelineData">The current <see cref="BhashiniPipelineTaskConfiguration"/>.</param>
+        /// <param name="sourceLanguage">The language of the input text. If <see langword="null"/>, takes it from the <see cref="BhashiniPipelineTaskConfiguration"/>.</param>
+        /// <param name="targetLanguage">The language of the output text. If <see langword="null"/>, takes it from the <see cref="BhashiniPipelineTaskConfiguration"/>.</param>
+        /// <returns>A configured <see cref="BhashiniComputeTask"/> object.</returns>
+        public static BhashiniComputeTask ToTranslateTask(this BhashiniPipelineTaskConfiguration pipelineData, string sourceLanguage = null, string targetLanguage = null)
         {
-            sourceLanguage ??= pipelineData.Language.SourceLanguage;
-            targetLanguage ??= pipelineData.Language.TargetLanguage;
+            BhashiniComputeTask task = new(BhashiniPipelineTaskType.TextToSpeech, pipelineData);
 
-            return new()
-            {
-                TaskType = BhashiniPipelineTaskType.TextTranslation,
-                Config = new()
-                {
-                    Language = new()
-                    {
-                        SourceLanguage = sourceLanguage,
-                        TargetLanguage = targetLanguage,
-                    },
+            if (!string.IsNullOrEmpty(sourceLanguage))
+                task.Configuration.Language.Source = sourceLanguage;
 
-                    ServiceId = pipelineData.ServiceId,
-                },
-            };
+            if (!string.IsNullOrEmpty(targetLanguage))
+                task.Configuration.Language.Target = targetLanguage;
+
+            return task;
         }
 
         /// <summary>
-        /// Gets the response text from an STT <see cref="BhashiniComputeResponse"/>.
+        /// Gets the transcribed text from a <see cref="BhashiniComputeResponse"/>.
         /// </summary>
         /// <param name="pipelineResponse">The current <see cref="BhashiniComputeResponse"/>.</param>
         /// <returns>The transcribed text.</returns>
         public static string GetSpeechToTextResult(this BhashiniComputeResponse pipelineResponse)
         {
-            BhashiniTextSource[] sources = pipelineResponse.PipelineResponse[^1].Text;
+            foreach (BhashiniComputeResponseData result in pipelineResponse.TaskResults)
+            {
+                if (result.TaskType == BhashiniPipelineTaskType.SpeechToText)
+                    return result.TextOutputs[0].Source;
+            }
 
-            return sources.Length == 0 ? null : sources[0].Source;
+            return string.Empty;
         }
 
         /// <summary>
-        /// Gets the response text from a translate <see cref="BhashiniComputeResponse"/>.
+        /// Gets the translated text from a <see cref="BhashiniComputeResponse"/>.
         /// </summary>
         /// <param name="pipelineResponse">The current <see cref="BhashiniComputeResponse"/>.</param>
         /// <returns>The translated text.</returns>
-        public static string GetTextTranslateResult(this BhashiniComputeResponse pipelineResponse)
+        public static string GetTranslateResult(this BhashiniComputeResponse pipelineResponse)
         {
-            BhashiniTextSource[] sources = pipelineResponse.PipelineResponse[^1].Text;
+            foreach (BhashiniComputeResponseData result in pipelineResponse.TaskResults)
+            {
+                if (result.TaskType == BhashiniPipelineTaskType.Translation)
+                    return result.TextOutputs[0].Target;
+            }
 
-            return sources.Length == 0 ? null : sources[0].Target;
+            return string.Empty;
         }
 
         /// <summary>
-        /// Gets the response audio from a TTS <see cref="BhashiniComputeResponse"/>.
+        /// Gets the audio from a <see cref="BhashiniComputeResponse"/>.
         /// </summary>
         /// <remarks>
         /// This method only supports <see cref="BhashiniAudioFormat.Wav"/>, <see cref="BhashiniAudioFormat.Mp3"/> and <see cref="BhashiniAudioFormat.Pcm"/>*.
@@ -132,14 +118,23 @@ namespace Uralstech.UBhashini.Data
         /// <returns>The synthesized audio.</returns>
         public static async Task<AudioClip> GetTextToSpeechResult(this BhashiniComputeResponse pipelineResponse)
         {
-            BhashiniComputeResponseData data = pipelineResponse.PipelineResponse[^1];
-            if (data.Audio.Length == 0)
+            byte[] audioData = null;
+            BhashiniAudioFormat audioFormat = BhashiniAudioFormat.Default;
+            foreach (BhashiniComputeResponseData result in pipelineResponse.TaskResults)
+            {
+                if (result.TaskType == BhashiniPipelineTaskType.TextToSpeech)
+                {
+                    audioData = Convert.FromBase64String(result.AudioOutputs[0].Base64Audio);
+                    audioFormat = result.TaskConfiguration.AudioFormat;
+                    break;
+                }
+            }
+
+            if (audioData == null)
                 return null;
 
-            byte[] audioData = Convert.FromBase64String(data.Audio[0].AudioContent);
-
 #if UTILITIES_AUDIO_1_0_0_OR_GREATER
-            if (data.Config.AudioFormat is BhashiniAudioFormat.Pcm)
+            if (audioFormat is BhashiniAudioFormat.Pcm)
             {
                 AudioClip pcmClip = AudioClip.Create("Bhashini_TTS_Response-PCM", 0, 0, 0, false);
                 Utilities.Audio.AudioClipExtensions.DecodeFromPCM(pcmClip, audioData);
@@ -148,12 +143,12 @@ namespace Uralstech.UBhashini.Data
             }
 #endif
 
-            AudioType audioType = data.Config.AudioFormat switch
+            AudioType audioType = audioFormat switch
             {
                 BhashiniAudioFormat.Wav => AudioType.WAV,
                 BhashiniAudioFormat.Mp3 => AudioType.MPEG,
 
-                _ => throw new BhashiniAudioIOException($"The format is not supported by {nameof(UnityWebRequestMultimedia)} and thus is not supported by {nameof(GetTextToSpeechResult)}.", data.Config.AudioFormat),
+                _ => throw new BhashiniAudioIOException($"The format is not supported by {nameof(UnityWebRequestMultimedia)} and thus is not supported by {nameof(GetTextToSpeechResult)}.", audioFormat),
             };
 
             string path = Path.Combine(Application.temporaryCachePath, UnityEngine.Random.Range(int.MinValue, int.MaxValue).ToString());

@@ -43,7 +43,7 @@ See the installation steps for the [Utilities.Audio](https://github.com/rageAgai
 1. Clone or download the repository from the desired branch (master, preview/unstable)
 2. Drag the package folder `UBhashini/UBhashini/Packages/com.uralstech.ubhashini` into your Unity project's `Packages` folder
 3. In the `Packages` folder of your project, add the following line to the list in `manifest.json`:
-    `"com.uralstech.ubhashini": "1.x.x",`
+    `"com.uralstech.ubhashini": "2.x.x",`
 4. Check the instructions for [`Utils.Singleton`](https://uralstech.github.io/Utils.Singleton) to install it.
 
 *Adding additional dependencies:*<br/>

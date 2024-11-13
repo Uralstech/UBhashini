@@ -11,10 +11,10 @@
     "Text to Speech",
     "Speech to Text"
   ],
-  "version": "1.0.2",
+  "version": "2.0.0-preview.1",
   "unity": "2022.3",
   "hideInEditor": false,
-  "documentationUrl": "https://github.com/Uralstech/UBhashini/blob/master/UBhashini/Packages/com.uralstech.ubhashini/Documentation~/README.md",
+  "documentationUrl": "https://uralstech.github.io/UBhashini/DocSource/QuickStart.html",
   "changelogUrl": "https://github.com/Uralstech/UBhashini/releases",
   "licensesUrl": "https://github.com/Uralstech/UBhashini/blob/master/LICENSE",
   "license": "Apache-2.0",
