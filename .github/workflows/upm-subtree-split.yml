@@ -18,3 +18,5 @@ jobs:
         fetch-depth: 0
 
     - uses: RageAgainstThePixel/upm-subtree-split@v1.1
+      with:
+        package-root: "**/Packages/com.uralstech.ubhashini"

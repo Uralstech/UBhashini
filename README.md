@@ -5,11 +5,11 @@ A C# wrapper for the ULCA Bhashini API.
 [![openupm](https://img.shields.io/npm/v/com.uralstech.ubhashini?label=openupm&registry_uri=https://package.openupm.com)](https://openupm.com/packages/com.uralstech.ubhashini/)
 [![openupm](https://img.shields.io/badge/dynamic/json?color=brightgreen&label=downloads&query=%24.downloads&suffix=%2Fmonth&url=https%3A%2F%2Fpackage.openupm.com%2Fdownloads%2Fpoint%2Flast-month%2Fcom.uralstech.ubhashini)](https://openupm.com/packages/com.uralstech.ubhashini/)
 
-### Installation
+## Installation
 
-This *should* work on any reasonably modern Unity version. Built and tested in Unity 2022.3.29f1.
+This *should* work on any reasonably modern Unity version. Built and tested in Unity 6000.0.26f1 (Unity 6).
 
-#### From OpenUPM Through Unity Package Manager
+### OpenUPM
 
 1. Open project settings
 2. Select `Package Manager`
@@ -18,26 +18,27 @@ This *should* work on any reasonably modern Unity version. Built and tested in U
     - URL: `https://package.openupm.com`
     - Scope(s)
         - `com.uralstech`
-        - *`com.utilities`
+        - `com.utilities`\*
 4. Open the Unity Package Manager window (`Window` -> `Package Manager`)
 5. Change the registry from `Unity` to `My Registries`
-6. Add the `UBhashini`, *`Utilities.Encoder.Wav` and *`Utilities.Audio` packages
+6. Add the `UBhashini`, `Utilities.Audio`\* and `Utilities.Encoder.Wav`\* packages
 
-#### From GitHub Through Unity Package Manager
+### Unity Package Manager
 
 1. Open the Unity Package Manager window (`Window` -> `Package Manager`)
 2. Select the `+` icon and `Add package from git URL...`
 3. Paste the UPM branch URL and press enter:
     - `https://github.com/Uralstech/UBhashini.git#upm`
+4. Check the instructions for [`Utils.Singleton`](https://uralstech.github.io/Utils.Singleton) to install it.
 
-*\*Adding additional dependencies:*<br/>
-Follow the steps detailed in the OpenUPM installation method and only install the *`Utilities.Encoder.Wav` and *`Utilities.Audio` packages.
+*Adding additional dependencies:*<br/>
+See the installation steps for the [Utilities.Audio](https://github.com/rageAgainstThePixel/com.utilities.audio)\* and [Utilities.Encoder.Wav](https://github.com/rageAgainstThePixel/com.utilities.encoder.wav)\* packages.
 
-*Optional, but required if you don't want to bother with encoding your AudioClips into Base64 strings manually, or, if you want to use the samples.
+\*Optional, but required if you don't want to bother with encoding your AudioClips into Base64 strings manually and for using the samples.
 
 ### Documentation
 
-See <https://github.com/Uralstech/UBhashini/blob/master/UBhashini/Packages/com.uralstech.ubhashini/Documentation~/README.md>.
+See <https://uralstech.github.io/UBhashini/DocSource/QuickStart.html>.
 
 ---
 
