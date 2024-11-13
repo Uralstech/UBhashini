@@ -60,9 +60,9 @@ namespace Uralstech.UBhashini.Data.Compute
         /// <br/>
         /// **<see href="https://openupm.com/packages/com.utilities.audio/">Utilities.Audio</see> is required.
         /// </remarks>
-        /// <param name="audio">Audio input for STT requests.</param>
+        /// <param name="audio">Audio input for STT requests. Defaults to <see cref="BhashiniAudioFormat.Wav"/>.</param>
         /// <param name="audioFormat">The format to encode the audio in.</param>
-        public BhashiniInputData(AudioClip audio, BhashiniAudioFormat audioFormat)
+        public BhashiniInputData(AudioClip audio, BhashiniAudioFormat audioFormat = BhashiniAudioFormat.Wav)
         {
             AudioData = new BhashiniAudioInput[1]
             {

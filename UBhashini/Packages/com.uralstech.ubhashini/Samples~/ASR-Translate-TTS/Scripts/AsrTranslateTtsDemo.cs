@@ -84,10 +84,10 @@ public class AsrTranslateTtsDemo : MonoBehaviour
     {
         Debug.Log("Doing computation...");
 
-        BhashiniInputData input = new(_audioClip, BhashiniAudioFormat.Wav);
+        BhashiniInputData input = new(_audioClip);
 
         BhashiniComputeResponse response = await BhashiniManager.Instance.ComputeOnPipeline(_pipelines.InferenceEndpoint, input,
-            _pipelines.SpeechToTextConfiguration.First.ToSpeechToTextTask(sampleRate: _sampleRate, audioFormat: BhashiniAudioFormat.Wav),
+            _pipelines.SpeechToTextConfiguration.First.ToSpeechToTextTask(sampleRate: _sampleRate),
             _pipelines.TranslateConfiguration.First.ToTranslateTask(),
             _pipelines.TextToSpeechConfiguration.First.ToTextToSpeechTask(_voiceType)
         );

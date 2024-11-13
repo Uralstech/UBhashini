@@ -2,11 +2,11 @@
 
 ## Setup
 
-Add an instance of `BhashiniApiManager` to your scene, and set it up with your ULCA user ID and API key, as detailed in the [*Bhashini documentation*](https://bhashini.gitbook.io/bhashini-apis/pre-requisites-and-onboarding).
+Add an instance of [`BhashiniManager`](~/api/Uralstech.UBhashini.BhashiniManager.yml) to your scene, and set it up with your ULCA User ID and API key, as detailed in the [*Bhashini documentation*](https://bhashini.gitbook.io/bhashini-apis/pre-requisites-and-onboarding).
 
 ## Pipelines
 
-As from the [*Bhashini documentation*](https://bhashini.gitbook.io/bhashini-apis):
+As per the [*Bhashini documentation*](https://bhashini.gitbook.io/bhashini-apis):
 > ULCA Pipeline is a set of tasks that any specific pipeline supports. For example, any specific pipeline (identified by unique pipeline ID) can support the following:
 > 
 > - only ASR (Speech To Text)
@@ -39,35 +39,47 @@ So, before we do any computation, we have to set up our pipelines:
 ```csharp
 using Uralstech.UBhashini;
 using Uralstech.UBhashini.Data;
+using Uralstech.UBhashini.Data.Pipeline;
 
 // This example shows a pipeline configured for a set of tasks which will receive spoken English audio
 // as input, transcribe and translate it to Hindi, and finally convert the text to spoken Hindi audio.
 
-BhashiniPipelineConfigResponse response = await BhashiniApiManager.Instance.ConfigurePipeline(new BhashiniPipelineTask[]
-{
-    BhashiniPipelineTask.GetConfigurationTask(BhashiniPipelineTaskType.SpeechToText, "en"), // Here, "en" is the source language.
-    BhashiniPipelineTask.GetConfigurationTask(BhashiniPipelineTaskType.TextTranslation, "en", "hi"), // Here, "en" is still the source language, but "hi" is the target language.
-    BhashiniPipelineTask.GetConfigurationTask(BhashiniPipelineTaskType.TextToSpeech, "hi"), // Here, the source language is "hi".
-});
+BhashiniPipelineResponse pipeline = await BhashiniManager.Instance.ConfigurePipeline(
+    new BhashiniPipelineRequestTask(BhashiniTask.SpeechToText, "en"), // Here, "en" is the source language.
+    new BhashiniPipelineRequestTask(BhashiniTask.Translation, "en", "hi"), // Here, "en" is still the source language, but "hi" is the target language.
+    new BhashiniPipelineRequestTask(BhashiniTask.TextToSpeech, "hi") // Here, the source language is "hi".
+);
 ```
 
-The Bhashini API follows the [*ISO-639*](https://www.loc.gov/standards/iso639-2/php/code_list.php) standard for language codes.
-
-The API wrapper class, `BhashiniApiManager`, usually returns `null` in if a request fails. Check the debug window or logs for errors in such cases.
+> The Bhashini API follows the [*ISO-639*](https://www.loc.gov/standards/iso639-2/php/code_list.php) standard for language codes.
+>
+> The UBhashini throws `BhashiniAudioIOException` and `BhashiniRequestException` errors when requests fail. Be sure to add try-catch blocks in your code!
 
 Now, we store the computation inference data in variables:
 
 ```csharp
-BhashiniPipelineInferenceData _inferenceData = response.PipelineEndpoint;
+BhashiniPipelineInferenceEndpoint endpoint = pipeline.InferenceEndpoint;
 
-BhashiniPipelineData _sttData = response.PipelineResponseConfig[0].Data[0];
-BhashiniPipelineData _translateData = response.PipelineResponseConfig[1].Data[0];
-BhashiniPipelineData _ttsData = response.PipelineResponseConfig[2].Data[0];
+BhashiniPipelineTaskConfiguration sttTaskConfig = pipeline.PipelineConfigurations[0].Configurations[0];
+BhashiniPipelineTaskConfiguration translateTaskConfig = pipeline.PipelineConfigurations[1].Configurations[0];
+BhashiniPipelineTaskConfiguration ttsTaskConfig = pipeline.PipelineConfigurations[2].Configurations[0];
 ```
 
-Here, as we specified the expected source and target languages for each task in the pipeline, it is very likely that the `Data` array in the `PipelineResponseConfig` elements will only contain one `BhashiniPipelineData` object.
-This may not always be the case, so, it is recommended to check the array of configurations for the desired model(s).
-The order of `PipelineResponseConfig` is based on the order of the tasks array in the input for `ConfigurePipeline`.
+Here, as we specified the expected source and target languages for each task in the pipeline, it is very likely that the `Configurations`
+array in `PipelineConfigurations` will only contain one `BhashiniPipelineTaskConfiguration` object. This may not always be the case, so 
+it is recommended to check the array of configurations for the desired model(s). The order of `PipelineConfigurations` is based
+on the order of the tasks array in the input for `ConfigurePipeline`.
+
+You can also use the following shortcuts to get the task configs.
+
+```csharp
+BhashiniPipelineTaskConfiguration sttTaskConfig = pipeline.SpeechToTextConfiguration.First;
+BhashiniPipelineTaskConfiguration translateTaskConfig = pipeline.TranslateConfiguration.First;
+BhashiniPipelineTaskConfiguration ttsTaskConfig = pipeline.TextToSpeechConfiguration.First;
+```
+
+`SpeechToTextConfiguration`, `TranslateConfiguration` and `TextToSpeechConfiguration` will get the first config matching the task type in
+the response and `First` gets the first available `BhashiniPipelineTaskConfiguration` from its `Configurations` array.
 
 ## Computation
 
@@ -76,38 +88,47 @@ Now that we have the inference data and pipelines configured, we can go straight
 ### Code
 
 ```csharp
-_audioClip = ...
-_audioSource = ...
+using Uralstech.UBhashini.Data.Compute;
 
-BhashiniPipelineTask[] tasks = new BhashiniPipelineTask[]
-{
-    _sttData.GetSpeechToTextTask(),
-    _translateData.GetTextTranslateTask(),
-    _ttsData.GetTextToSpeechTask(BhashiniVoiceType.Male),
-};
+// The below code records a 10 seconds audio clip from the device microphone.
 
-BhashiniComputeResponse response = await BhashiniApiManager.Instance.ComputeOnPipeline(_inferenceData, tasks, audioSource: _audioClip);
+int sampleRate = AudioSettings.GetConfiguration().sampleRate;
+AudioClip audioInput = Microphone.Start(string.Empty, false, 10, sampleRate);
 
-AudioClip result = await response.GetTextToSpeechResult();
-_audioSource.PlayOneShot(result);
+while (Microphone.IsRecording(string.Empty))
+    await Task.Yield();
+
+if (!TryGetComponent(out AudioSource audioSource))
+    audioSource = gameObject.AddComponent<AudioSource>();
+
+// Now, we send the clip to Bhashini.
+
+BhashiniComputeResponse computedResults = await BhashiniManager.Instance.ComputeOnPipeline(endpoint,
+    new BhashiniInputData(audioInput),
+    sttTaskConfig.ToSpeechToTextTask(sampleRate: sampleRate),
+    translateTaskConfig.ToTranslateTask(),
+    ttsTaskConfig.ToTextToSpeechTask()
+);
+
+audioSource.PlayOneShot(await computedResults.GetTextToSpeechResult());
 ```
 
-`ComputeOnPipeline` accepts three optional parameter:
-- `textSource` - This is for text-input-based tasks, like Translate or TTS.
-- `audioSource` - This is for audio-input-based tasks, like STT. This parameter also requires the `Utilities.Encoder.Wav` and `Utilities.Audio` packages.
-- `rawBase64AudioSource` - This is also for audio-input-based tasks, but takes the raw Base64-encoded audio data. You will have to encode your audio manually.
+`BhashiniInputData` has two constructors:
+- `BhashiniInputData(string text = null, string audio = null)`
+    - Here, `text` is input for translation and TTS requests, and `audio` is base64-encoded audio for STT requests. Only provide one.
+- `BhashiniInputData(AudioClip audio, BhashiniAudioFormat audioFormat = BhashiniAudioFormat.Wav)`
+    - This constructor allows you to directly provide an `AudioClip` as input, but requires the `Utilities.Encoder.Wav` or
+    `Utilities.Audio` packages, based on the chosen encoding.
 
-You must only provide one of the parameters at a time, based on the first task given to the pipeline.
-
-Also, `GetSpeechToTextTask` takes an optional `sampleRate` argument. By default, it is 44100, but make sure it matches with your audio data.
+Also, `ToSpeechToTextTask` takes an optional `sampleRate` argument. By default, it is 44100, but make sure it matches with your audio data.
 
 `BhashiniComputeResponse` contains three utility functions to help extract the actual text or audio response:
 - `GetSpeechToTextResult`
-- `GetTextTranslateResult` and
+- `GetTranslateResult` and
 - `GetTextToSpeechResult`
 
 You should call them based on the last task in the pipeline's task list. If your pipeline's last task is STT, use `GetSpeechToTextResult`.
-If the last task is translate, use `GetTextTranslateResult`.
+If the last task is translate, use `GetTranslateResult`. If it's TTS, use `GetTextToSpeechResult`.
 
 `ComputeOnPipeline` and `GetTextToSpeechResult` will throw `BhashiniAudioIOException` errors if they encounter an unsupported format.
 

@@ -11,7 +11,7 @@
     "Text to Speech",
     "Speech to Text"
   ],
-  "version": "2.0.0-preview.1",
+  "version": "2.0.0",
   "unity": "2022.3",
   "hideInEditor": false,
   "documentationUrl": "https://uralstech.github.io/UBhashini/DocSource/QuickStart.html",
@@ -29,7 +29,7 @@
   "samples": [
     {
       "displayName": "ASR-Translate-TTS",
-      "description": "A sample scene showcasing the capabilities of the UBhashini plugin. This sample requires com.utilities.audio and com.utilities.encoder.wav from OpenUPM.",
+      "description": "A sample scene showcasing the capabilities of the UBhashini plugin. This sample requires com.utilities.audio and com.utilities.encoder.wav.",
       "path": "Samples~/ASR-Translate-TTS"
     }
   ],
