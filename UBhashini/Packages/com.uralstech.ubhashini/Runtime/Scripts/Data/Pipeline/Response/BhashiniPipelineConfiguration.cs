@@ -29,6 +29,7 @@ namespace Uralstech.UBhashini.Data.Pipeline
         /// <summary>
         /// Gets the first <see cref="BhashiniPipelineTaskConfiguration"/> in <see cref="Configurations"/>.
         /// </summary>
+        [JsonIgnore]
         public BhashiniPipelineTaskConfiguration First => Configurations.Length > 0 ? Configurations[0] : null;
     }
 }
