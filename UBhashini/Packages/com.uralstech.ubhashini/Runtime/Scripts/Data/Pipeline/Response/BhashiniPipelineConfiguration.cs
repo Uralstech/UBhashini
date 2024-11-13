@@ -15,7 +15,7 @@ namespace Uralstech.UBhashini.Data.Pipeline
         /// <seealso href="https://bhashini.gitbook.io/bhashini-apis/pipeline-config-call/response-payload"/>
         /// </remarks>
         [JsonProperty("taskType")]
-        public BhashiniPipelineTaskType Type;
+        public BhashiniTask Type;
 
         /// <summary>
         /// The supported configurations.
@@ -25,5 +25,10 @@ namespace Uralstech.UBhashini.Data.Pipeline
         /// </remarks>
         [JsonProperty("config")]
         public BhashiniPipelineTaskConfiguration[] Configurations;
+
+        /// <summary>
+        /// Gets the first <see cref="BhashiniPipelineTaskConfiguration"/> in <see cref="Configurations"/>.
+        /// </summary>
+        public BhashiniPipelineTaskConfiguration First => Configurations.Length > 0 ? Configurations[0] : null;
     }
 }

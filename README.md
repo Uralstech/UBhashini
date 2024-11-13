@@ -38,7 +38,7 @@ See the installation steps for the [Utilities.Audio](https://github.com/rageAgai
 
 ### Documentation
 
-See <https://github.com/Uralstech/UBhashini/blob/master/UBhashini/Packages/com.uralstech.ubhashini/Documentation~/README.md>.
+See <https://uralstech.github.io/UBhashini/DocSource/QuickStart.html>.
 
 ---
 

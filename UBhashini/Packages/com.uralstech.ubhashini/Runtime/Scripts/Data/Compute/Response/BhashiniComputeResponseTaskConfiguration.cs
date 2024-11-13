@@ -8,7 +8,7 @@ namespace Uralstech.UBhashini.Data.Compute
     /// <summary>
     /// The configuration of the task's result.
     /// </summary>
-    public class BhashiniComputeResponseConfiguration
+    public class BhashiniComputeResponseTaskConfiguration
     {
         /// <summary>
         /// The service used to compute the result.
@@ -47,7 +47,7 @@ namespace Uralstech.UBhashini.Data.Compute
         public int SampleRate;
 
         /// <summary>
-        /// Additional data of an unknown format.
+        /// Additional data.
         /// </summary>
         /// <remarks>
         /// <seealso href="https://bhashini.gitbook.io/bhashini-apis/pipeline-compute-call/response-payload"/>

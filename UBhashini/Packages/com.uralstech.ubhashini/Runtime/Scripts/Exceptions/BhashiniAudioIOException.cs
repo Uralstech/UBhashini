@@ -1,5 +1,4 @@
 ﻿using System;
-using Uralstech.UBhashini.Data;
 using Uralstech.UBhashini.Data.Compute;
 
 namespace Uralstech.UBhashini.Exceptions

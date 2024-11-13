@@ -15,7 +15,7 @@ namespace Uralstech.UBhashini.Data.Compute
         /// <seealso href="https://bhashini.gitbook.io/bhashini-apis/pipeline-compute-call/request-payload"/>
         /// </remarks>
         [JsonProperty("taskType")]
-        public BhashiniPipelineTaskType Type;
+        public BhashiniTask Type;
 
         /// <summary>
         /// The configuration for the task.
@@ -24,19 +24,19 @@ namespace Uralstech.UBhashini.Data.Compute
         /// <seealso href="https://bhashini.gitbook.io/bhashini-apis/pipeline-compute-call/request-payload"/>
         /// </remarks>
         [JsonProperty("config")]
-        public BhashiniComputeConfiguration Configuration;
+        public BhashiniComputeTaskConfiguration Configuration;
 
         /// <param name="type">The task type.</param>
-        public BhashiniComputeTask(BhashiniPipelineTaskType type)
+        public BhashiniComputeTask(BhashiniTask type)
         {
             Type = type;
         }
 
         /// <param name="type">The task type.</param>
         /// <param name="configuration">The task configuration from a <see cref="Pipeline.BhashiniPipelineResponse"/>.</param>
-        public BhashiniComputeTask(BhashiniPipelineTaskType type, Pipeline.BhashiniPipelineTaskConfiguration configuration) : this(type)
+        public BhashiniComputeTask(BhashiniTask type, Pipeline.BhashiniPipelineTaskConfiguration configuration) : this(type)
         {
-            Configuration = new BhashiniComputeConfiguration()
+            Configuration = new BhashiniComputeTaskConfiguration()
             {
                 ServiceId = configuration.ServiceId,
                 Language = configuration.Language,

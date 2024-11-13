@@ -15,7 +15,7 @@ namespace Uralstech.UBhashini.Data.Pipeline
         /// <seealso href="https://bhashini.gitbook.io/bhashini-apis/pipeline-config-call/request-payload"/>
         /// </remarks>
         [JsonProperty("taskType")]
-        public BhashiniPipelineTaskType Type;
+        public BhashiniTask Type;
 
         /// <summary>
         /// Optional extra configurations for the task.
@@ -27,7 +27,7 @@ namespace Uralstech.UBhashini.Data.Pipeline
         public BhashiniPipelineRequestTaskConfiguration Configuration = null;
 
         /// <param name="type">The type of the task.</param>
-        public BhashiniPipelineRequestTask(BhashiniPipelineTaskType type)
+        public BhashiniPipelineRequestTask(BhashiniTask type)
         {
             Type = type;
         }
@@ -35,14 +35,14 @@ namespace Uralstech.UBhashini.Data.Pipeline
         /// <param name="type">The type of the task.</param>
         /// <param name="sourceLanguage">Source language for the task.</param>
         /// <param name="targetLanguage">Target language for the task. Optional, only for translation.</param>
-        public BhashiniPipelineRequestTask(BhashiniPipelineTaskType type, string sourceLanguage, string targetLanguage = null) : this(type)
+        public BhashiniPipelineRequestTask(BhashiniTask type, string sourceLanguage, string targetLanguage = null) : this(type)
         {
             Configuration = new BhashiniPipelineRequestTaskConfiguration()
             {
                 Language = new BhashiniLanguageData()
                 {
                     Source = sourceLanguage,
-                    Target = targetLanguage ?? string.Empty,
+                    Target = targetLanguage,
                 },
             };
         }
