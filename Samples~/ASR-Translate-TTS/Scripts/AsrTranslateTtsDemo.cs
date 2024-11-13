@@ -2,6 +2,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using Uralstech.UBhashini;
 using Uralstech.UBhashini.Data;
+using Uralstech.UBhashini.Data.Pipeline;
+using Uralstech.UBhashini.Data.Compute;
 
 public class AsrTranslateTtsDemo : MonoBehaviour
 {
@@ -18,10 +20,10 @@ public class AsrTranslateTtsDemo : MonoBehaviour
     private AudioClip _audioClip;
     private string _microphoneDevice;
 
-    private BhashiniPipelineData _sttData;
-    private BhashiniPipelineData _translateData;
-    private BhashiniPipelineData _ttsData;
-    private BhashiniPipelineInferenceData _inferenceData;
+    private BhashiniPipelineTaskConfiguration _sttData;
+    private BhashiniPipelineTaskConfiguration _translateData;
+    private BhashiniPipelineTaskConfiguration _ttsData;
+    private BhashiniPipelineInferenceEndpoint _inferenceData;
 
     private BhashiniVoiceType _voiceType;
     private int _sampleRate;
@@ -62,11 +64,11 @@ public class AsrTranslateTtsDemo : MonoBehaviour
     {
         Debug.Log("Setting up pipelines.");
 
-        BhashiniPipelineConfigResponse response = await BhashiniApiManager.Instance.ConfigurePipeline(new BhashiniPipelineTask[]
+        BhashiniPipelineResponse response = await BhashiniManager.Instance.ConfigurePipeline(new BhashiniPipelineRequestTask[]
         {
-            BhashiniPipelineTask.GetConfigurationTask(BhashiniPipelineTaskType.SpeechToText, _sourceLanguage.text),
-            BhashiniPipelineTask.GetConfigurationTask(BhashiniPipelineTaskType.TextTranslation, _sourceLanguage.text, _targetLanguage.text),
-            BhashiniPipelineTask.GetConfigurationTask(BhashiniPipelineTaskType.TextToSpeech, _targetLanguage.text),
+            new BhashiniPipelineRequestTask(BhashiniPipelineTaskType.SpeechToText, _sourceLanguage.text),
+            new BhashiniPipelineRequestTask(BhashiniPipelineTaskType.Translation, _sourceLanguage.text, _targetLanguage.text),
+            new BhashiniPipelineRequestTask(BhashiniPipelineTaskType.TextToSpeech, _targetLanguage.text),
         });
 
         if (response is null)
@@ -75,11 +77,11 @@ public class AsrTranslateTtsDemo : MonoBehaviour
             return;
         }
 
-        _inferenceData = response.PipelineEndpoint;
+        _inferenceData = response.InferenceEndpoint;
 
-        _sttData = response.PipelineResponseConfig[0].Data[0];
-        _translateData = response.PipelineResponseConfig[1].Data[0];
-        _ttsData = response.PipelineResponseConfig[2].Data[0];
+        _sttData = response.PipelineConfigurations[0].Configurations[0];
+        _translateData = response.PipelineConfigurations[1].Configurations[0];
+        _ttsData = response.PipelineConfigurations[2].Configurations[0];
 
         Debug.Log("Pipeline configured!");
     }
@@ -93,14 +95,14 @@ public class AsrTranslateTtsDemo : MonoBehaviour
     {
         Debug.Log("Doing computation...");
 
-        BhashiniPipelineTask[] tasks = new BhashiniPipelineTask[]
+        BhashiniComputeTask[] tasks = new BhashiniComputeTask[]
         {
-            _sttData.GetSpeechToTextTask(sampleRate: _sampleRate),
-            _translateData.GetTextTranslateTask(),
-            _ttsData.GetTextToSpeechTask(_voiceType),
+            _sttData.ToSpeechToTextTask(sampleRate: _sampleRate),
+            _translateData.ToTranslateTask(),
+            _ttsData.ToTextToSpeechTask(_voiceType),
         };
 
-        BhashiniComputeResponse response = await BhashiniApiManager.Instance.ComputeOnPipeline(_inferenceData, tasks, audioSource: _audioClip);
+        BhashiniComputeResponse response = await BhashiniManager.Instance.ComputeOnPipeline(_inferenceData, tasks, audioSource: _audioClip);
 
         if (response is null)
         {

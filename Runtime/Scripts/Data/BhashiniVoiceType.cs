@@ -10,20 +10,38 @@ namespace Uralstech.UBhashini.Data
     [JsonConverter(typeof(StringEnumConverter))]
     public enum BhashiniVoiceType
     {
-        UNSPECIFIED_UNKNOWN_DONTUSE_DEFAULT = -1,
+        /// <summary>
+        /// Default value. Do not use.
+        /// </summary>
+        Default = 0,
 
+        /// <summary>
+        /// Male voice.
+        /// </summary>
         [EnumMember(Value = "male")]
         Male,
 
+        /// <summary>
+        /// Female voice.
+        /// </summary>
         [EnumMember(Value = "female")]
         Female,
 
+        /// <summary>
+        /// Trans voice.
+        /// </summary>
         [EnumMember(Value = "transgender")]
         Transgender,
 
+        /// <summary>
+        /// Non specified voice.
+        /// </summary>
         [EnumMember(Value = "non-specified")]
         NonSpecified,
 
+        /// <summary>
+        /// Other voice.
+        /// </summary>
         [EnumMember(Value = "others")]
         Others,
     }
