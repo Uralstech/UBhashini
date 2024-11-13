@@ -61,10 +61,11 @@ namespace Uralstech.UBhashini
         }
 
         /// <summary>
-        /// Configures a pipeline for the given tasks for computation.
+        /// Configures a pipeline for the given tasks.
         /// </summary>
         /// <param name="tasks">The pipeline tasks.</param>
-        /// <returns>The configuration response if successful and <see langword="null"/> otherwise.</returns>
+        /// <returns>The available pipeline configurations.</returns>
+        /// <exception cref="BhashiniRequestException">Thrown when the request fails or can't be processed.</exception>
         public async Task<BhashiniPipelineResponse> ConfigurePipeline(params BhashiniPipelineRequestTask[] tasks)
         {
             BhashiniPipelineRequest request = new()
@@ -89,17 +90,10 @@ namespace Uralstech.UBhashini
                 await Task.Yield();
 
             if (webRequest.result is not UnityWebRequest.Result.Success)
-            {
-                Debug.LogError($"Failed {nameof(ConfigurePipeline)} request: {webRequest.error} | {webRequest.downloadHandler.text}");
-                return null;
-            }
+                throw new BhashiniRequestException(webRequest);
 
-            BhashiniPipelineResponse response = JsonConvert.DeserializeObject<BhashiniPipelineResponse>(webRequest.downloadHandler.text);
-            if (response is null)
-            {
-                Debug.LogError($"Failed {nameof(ConfigurePipeline)} request: Could not deserialize \"{webRequest.downloadHandler.text}\"");
-                return null;
-            }
+            BhashiniPipelineResponse response = JsonConvert.DeserializeObject<BhashiniPipelineResponse>(webRequest.downloadHandler.text)
+                ?? throw new BhashiniRequestException($"Failed Bhashini API request! Could not deserialize:\n{webRequest.downloadHandler.text}");
 
             Debug.Log("Pipeline configuration completed.");
             return response;
@@ -108,18 +102,11 @@ namespace Uralstech.UBhashini
         /// <summary>
         /// Runs the given computation tasks on a pipeline.
         /// </summary>
-        /// <remarks>
-        /// Provide audio data through <paramref name="rawBase64AudioSource"/>, not <paramref name="audioSource"/> if you are using any audio other than <see cref="BhashiniAudioFormat.Wav"/>* or <see cref="BhashiniAudioFormat.Pcm"/>**.
-        /// <br/>
-        /// <br/>
-        /// *<see href="https://openupm.com/packages/com.utilities.encoder.wav/">Utilities.Encoding.Wav</see> and <see href="https://openupm.com/packages/com.utilities.audio/">Utilities.Audio</see> are required.
-        /// <br/>
-        /// **<see href="https://openupm.com/packages/com.utilities.audio/">Utilities.Audio</see> is required.
-        /// </remarks>
         /// <param name="inferenceEndpoint">The pipeline's inference endpoint.</param>
         /// <param name="input">Input data for the computation.</param>
         /// <param name="tasks">The tasks to run on the pipeline.</param>
-        /// <returns>The computation response if successful and <see langword="null"/> otherwise.</returns>
+        /// <returns>The computed results.</returns>
+        /// <exception cref="BhashiniRequestException">Thrown when the request fails or can't be processed.</exception>
         /// <exception cref="BhashiniAudioIOException">Thrown when an unsupported audio encoding is encountered.</exception>
         public async Task<BhashiniComputeResponse> ComputeOnPipeline(BhashiniPipelineInferenceEndpoint inferenceEndpoint, BhashiniInputData input, params BhashiniComputeTask[] tasks)
         {
@@ -141,17 +128,10 @@ namespace Uralstech.UBhashini
                 await Task.Yield();
 
             if (webRequest.result != UnityWebRequest.Result.Success)
-            {
-                Debug.LogError($"Failed {nameof(ComputeOnPipeline)} request: {webRequest.error} | {webRequest.downloadHandler.text}");
-                return null;
-            }
+                throw new BhashiniRequestException(webRequest);
 
-            BhashiniComputeResponse response = JsonConvert.DeserializeObject<BhashiniComputeResponse>(webRequest.downloadHandler.text);
-            if (response is null)
-            {
-                Debug.LogError($"Failed {nameof(ComputeOnPipeline)} request: Could not deserialize \"{webRequest.downloadHandler.text}\"");
-                return null;
-            }
+            BhashiniComputeResponse response = JsonConvert.DeserializeObject<BhashiniComputeResponse>(webRequest.downloadHandler.text)
+                ?? throw new BhashiniRequestException($"Failed Bhashini API request! Could not deserialize:\n{webRequest.downloadHandler.text}");
 
             Debug.Log("Pipeline computation completed!");
             return response;
