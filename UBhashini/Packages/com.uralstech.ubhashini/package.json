@@ -11,7 +11,7 @@
     "Text to Speech",
     "Speech to Text"
   ],
-  "version": "2.0.1",
+  "version": "2.0.2",
   "unity": "2022.3",
   "hideInEditor": false,
   "documentationUrl": "https://uralstech.github.io/UBhashini/DocSource/QuickStart.html",
