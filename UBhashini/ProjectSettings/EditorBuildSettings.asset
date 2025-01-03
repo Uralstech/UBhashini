@@ -6,6 +6,7 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Samples/UBhashini/1.0.1/ASR-Translate-TTS/Scenes/ASR-Translate-TTS_Demo.unity
-    guid: f0a590eec16ab0249a74e2d664a28110
+    path: Assets/Samples/UBhashini/2.0.1/ASR-Translate-TTS/Scenes/ASR-Translate-TTS_Demo.unity
+    guid: 63f99f47d4ab79646996c9b9e85c6a06
   m_configObjects: {}
+  m_UseUCBPForAssetBundles: 0
