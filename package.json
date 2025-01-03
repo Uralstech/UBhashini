@@ -11,7 +11,7 @@
     "Text to Speech",
     "Speech to Text"
   ],
-  "version": "2.0.0",
+  "version": "2.0.1",
   "unity": "2022.3",
   "hideInEditor": false,
   "documentationUrl": "https://uralstech.github.io/UBhashini/DocSource/QuickStart.html",
@@ -35,7 +35,7 @@
   ],
   "dependencies": {
     "com.unity.nuget.newtonsoft-json": "3.2.1",
-    "com.uralstech.utils.singleton": "1.1.1",
+    "com.uralstech.utils.singleton": "1.2.1",
     "com.unity.modules.unitywebrequestaudio": "1.0.0",
     "com.unity.modules.unitywebrequest": "1.0.0",
     "com.unity.modules.audio": "1.0.0"
