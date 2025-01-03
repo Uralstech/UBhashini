@@ -1,0 +1,17 @@
+{
+    "name": "Uralstech.UBhashini.Samples.ASR-Translate-TTS",
+    "rootNamespace": "",
+    "references": [
+        "GUID:14da9dd3758c4a4409f4ec9e4d2f8cb3",
+        "GUID:2281fe9ed9abb88469162fc481fcc7a1"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
